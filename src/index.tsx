@@ -27,6 +27,9 @@ import ChannelsSection from "./channels";
 import { channelsSection } from "./channels/urls";
 import CollectionSection from "./collections";
 import AppLayout from "./components/AppLayout";
+import useAppChannel, {
+  ChannelProvider
+} from "./components/ChannelsSelect/ChannelContext";
 import { DateProvider } from "./components/Date";
 import { LocaleProvider } from "./components/Locale";
 import MessageManagerProvider from "./components/messages";
@@ -110,7 +113,9 @@ const App: React.FC = () => {
                   <AppStateProvider>
                     <ShopProvider>
                       <AuthProvider>
-                        <Routes />
+                        <ChannelProvider>
+                          <Routes />
+                        </ChannelProvider>
                       </AuthProvider>
                     </ShopProvider>
                   </AppStateProvider>
@@ -134,11 +139,15 @@ const Routes: React.FC = () => {
     tokenVerifyLoading,
     user
   } = useAuth();
+  const { channel } = useAppChannel();
 
   return (
     <>
       <WindowTitle title={intl.formatMessage(commonMessages.dashboard)} />
-      {isAuthenticated && !tokenAuthLoading && !tokenVerifyLoading ? (
+      {channel &&
+      isAuthenticated &&
+      !tokenAuthLoading &&
+      !tokenVerifyLoading ? (
         <AppLayout>
           <ErrorBoundary
             onError={() =>
@@ -265,7 +274,7 @@ const Routes: React.FC = () => {
             </Switch>
           </ErrorBoundary>
         </AppLayout>
-      ) : hasToken && tokenVerifyLoading ? (
+      ) : (isAuthenticated && !channel) || (hasToken && tokenVerifyLoading) ? (
         <LoginLoading />
       ) : (
         <Auth />
