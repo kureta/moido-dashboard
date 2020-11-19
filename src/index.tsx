@@ -139,7 +139,7 @@ const Routes: React.FC = () => {
     tokenVerifyLoading,
     user
   } = useAuth();
-  const { channel } = useAppChannel();
+  const { channel } = useAppChannel(false);
 
   return (
     <>
