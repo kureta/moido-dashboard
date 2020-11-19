@@ -116,6 +116,10 @@ export interface TabPageProps {
   onTabSave: () => void;
 }
 
+export interface ChannelProps {
+  selectedChannelId: string;
+}
+
 export interface PartialMutationProviderOutput<
   TData extends {} = {},
   TVariables extends {} = {}
